@@ -1,6 +1,6 @@
 FROM linuxserver/chromium:latest
 
-# Ubuntu system packages ko update karna aur Node.js + Python install karna
+# Ubuntu core packages update aur installation (NO apk commands allowed here)
 RUN apt-get update && apt-get install -y \
     curl \
     python3 \
