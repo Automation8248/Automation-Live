@@ -1,13 +1,10 @@
 {
-  "name": "render-247-browser",
+  "name": "docker-secure-proxy",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
   "dependencies": {
     "express": "^4.19.0",
     "cookie-session": "^2.1.0",
-    "puppeteer": "^22.0.0"
+    "http-proxy": "^1.18.1"
   }
 }
