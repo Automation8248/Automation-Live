@@ -1,15 +1,28 @@
 const express = require('express');
+const basicAuth = require('express-basic-auth');
 const puppeteer = require('puppeteer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Render ko active rakhne ke liye basic ping route
+// 🔒 BASIC AUTH CONFIGURATION
+// Yahan apna pasand ka username aur password set karein
+const USERNAME = 'admin'; 
+const PASSWORD = 'MySecurePassword123'; 
+
+app.use(basicAuth({
+    users: { [USERNAME]: PASSWORD },
+    challenge: true, // Yeh browser me login popup dikhayega
+    unauthorizedResponse: 'Unauthorized Access: Invalid Credentials.'
+}));
+
+// Render ko active rakhne ke liye protected ping route
 app.get('/', (req, res) => {
-    res.send('Browser is running 24/7!');
+    res.send('Authenticated successfully! Browser is running 24/7.');
 });
 
 async function startBrowser() {
     try {
+        console.log('Launching secure background browser...');
         const browser = await puppeteer.launch({
             headless: true,
             args: [
@@ -21,26 +34,26 @@ async function startBrowser() {
         });
         const page = await browser.newPage();
         
-        // Yahan wo URL dalein jise aap 24/7 chalana chahte hain
+        // Jis target website ko 24/7 chalana hai uska URL yahan dalein
         await page.goto('https://example.com', { waitUntil: 'networkidle2' });
-        console.log('Browser successfully loaded the page.');
+        console.log('Target website successfully loaded in background.');
 
-        // Browser ko crash hone se bachane ke liye keep-alive loop
+        // Keep-alive loop (Har 5 minute me reload)
         setInterval(async () => {
             try {
                 await page.reload();
-                console.log('Page reloaded to keep session active.');
+                console.log('Background browser reloaded successfully.');
             } catch (err) {
-                console.error('Reload failed:', err);
+                console.error('Background browser reload failed:', err);
             }
-        }, 5 * 60 * 1000); // Har 5 minute me reload hoga
+        }, 5 * 60 * 1000);
 
-    } catch (error) {
-        console.error('Browser error:', error);
+} catch (error) {
+        console.error('Browser initialization error:', error);
     }
 }
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Secure server running on port ${PORT}`);
     startBrowser();
 });
