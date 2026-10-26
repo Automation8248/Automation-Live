@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "express": "^4.19.0",
-    "express-basic-auth": "^1.2.1",
+    "cookie-session": "^2.1.0",
     "puppeteer": "^22.0.0"
   }
 }
