@@ -1,4 +1,4 @@
-FROM lscr.io/linuxserver/chromium:latest
+FROM linuxserver/chromium:latest
 
 # Ubuntu system packages ko update karna aur Node.js + Python install karna
 RUN apt-get update && apt-get install -y \
@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     python3-requests \
     nodejs \
     npm \
-    && rm -rf /lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 # Working directory setup
 WORKDIR /app
